@@ -1,0 +1,30 @@
+name: pr-name-linter
+on:
+  pull_request:
+    types: ['opened', 'edited', 'reopened', 'synchronize']
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install Dependencies
+      run: npm install @commitlint/config-conventional
+    - uses: JulienKode/pull-request-name-linter-action@v0.5.0
+
+on:
+  schedule:
+    - cron: '30 1 * * 1'
+
+jobs:
+  approve-prs:
+    runs-on: ubuntu-latest
+    name: Approve valid PRs 
+    steps:
+      - name: Approve valid workflows
+        uses: Cian911/gomerge-action@master
+        with:
+          repository: ${{ github.repository }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: ""
+          approve: "true"
