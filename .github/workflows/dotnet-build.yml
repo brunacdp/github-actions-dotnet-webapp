@@ -6,10 +6,17 @@ on:
     - cron: '30 1 * * 1'
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: Install Dependencies
-      run: npm install @commitlint/config-conventional
-    - uses: JulienKode/pull-request-name-linter-action@v0.5.0
+build:
+
+  runs-on: ubuntu-latest
+
+  steps:
+  - uses: actions/checkout@v4
+  - name: Setup .NET
+   uses: actions/setup-dotnet@v4
+   with:
+    dotnet-version: 8.0.x
+  - name: Restore dependencies
+    run: dotnet restore **/*.csproj
+  - name: Build
+   run: dotnet build **/*.csproj --no-restore
